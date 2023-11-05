@@ -3,7 +3,7 @@ use std::usize::MAX;
 use std::{cmp, fmt};
 
 /// Byte offset of a node start and end positions in the input stream
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Span {
     pub start: usize,
     pub end: usize,
@@ -29,12 +29,6 @@ impl Span {
     /// Test if span is undefined
     pub fn is_none(&self) -> bool {
         self.start == MAX && self.end == MAX
-    }
-}
-
-impl cmp::PartialEq for Span {
-    fn eq(&self, other: &Self) -> bool {
-        (self.start == other.start && self.end == other.end) || self.is_none() || other.is_none()
     }
 }
 
