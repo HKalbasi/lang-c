@@ -3,7 +3,7 @@ use std::usize::MAX;
 use std::{cmp, fmt};
 
 /// Byte offset of a node start and end positions in the input stream
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Span {
     pub start: usize,
     pub end: usize,
