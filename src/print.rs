@@ -69,7 +69,7 @@ impl<'ast, 'a> Visit<'ast> for Printer<'a> {
                 self.field("Character");
                 self.field(c);
             }
-            _ => {},
+            _ => {}
         }
 
         visit_constant(&mut self.block(), n, span);
@@ -375,6 +375,9 @@ impl<'ast, 'a> Visit<'ast> for Printer<'a> {
             TypeQualifier::NullUnspecified => "NullUnspecified",
             TypeQualifier::Nullable => "Nullable",
             TypeQualifier::Atomic => "Atomic",
+            TypeQualifier::Owned => "Owned",
+            TypeQualifier::Borrowed => "Borrowed",
+            TypeQualifier::BorrowedMut => "BorrowedMut",
         });
         visit_type_qualifier(&mut self.block(), n, span);
     }

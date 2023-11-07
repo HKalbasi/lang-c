@@ -784,6 +784,9 @@ pub enum TypeQualifier {
     Nullable,
     /// `_Atomic`
     Atomic,
+    Owned,
+    Borrowed,
+    BorrowedMut,
 }
 
 // From 6.7.4

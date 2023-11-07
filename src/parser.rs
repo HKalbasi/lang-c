@@ -8986,7 +8986,7 @@ fn __parse_type_qualifier0<'input>(__input: &'input str, __state: &mut ParseStat
                 Failed => Failed,
             }
         };
-        match __choice_res {
+        let res = match __choice_res {
             Matched(__pos, __value) => Matched(__pos, __value),
             Failed => {
                 let __choice_res = {
@@ -9403,8 +9403,101 @@ fn __parse_type_qualifier0<'input>(__input: &'input str, __state: &mut ParseStat
                     }
                 }
             }
+        };
+
+        match res {
+            Matched(__pos, __value) => Matched(__pos, __value),
+            Failed => __parse_ownership_type_qualifier(__input, __state, __pos, env)
         }
     }
+}
+
+fn __parse_ownership_type_qualifier<'input>(__input: &'input str, __state: &mut ParseState<'input>, __pos: usize, env: &mut Env) -> RuleResult<TypeQualifier> {
+    __state.suppress_fail += 1;
+    let mut res = {
+        let __choice_res = slice_eq(__input, __state, __pos, "owned");
+        match __choice_res {
+            Matched(__pos, __value) => {
+                __state.suppress_fail += 1;
+                let __assert_res = if __input.len() > __pos {
+                    let (__ch, __next) = char_range_at(__input, __pos);
+                    match __ch {
+                        '_' | 'a'...'z' | 'A'...'Z' | '0'...'9' => Matched(__next, ()),
+                        _ => __state.mark_failure(__pos, "[_a-zA-Z0-9]"),
+                    }
+                } else {
+                    __state.mark_failure(__pos, "[_a-zA-Z0-9]")
+                };
+                __state.suppress_fail -= 1;
+                match __assert_res {
+                    Failed => Matched(__pos, TypeQualifier::Owned),
+                    Matched(..) => Failed,
+                }
+            },
+            Failed => Failed
+        }
+    };
+    __state.suppress_fail -= 1;
+
+
+    if let Failed = res {
+        __state.suppress_fail += 1;
+        res = {
+            let __choice_res = slice_eq(__input, __state, __pos, "borrowed");
+            match __choice_res {
+                Matched(__pos, _) => {
+                    __state.suppress_fail += 1;
+                    let __assert_res = if __input.len() > __pos {
+                        let (__ch, __next) = char_range_at(__input, __pos);
+                        match __ch {
+                            '_' | 'a'...'z' | 'A'...'Z' | '0'...'9' => Matched(__next, ()),
+                            _ => __state.mark_failure(__pos, "[_a-zA-Z0-9]"),
+                        }
+                    } else {
+                        __state.mark_failure(__pos, "[_a-zA-Z0-9]")
+                    };
+                    __state.suppress_fail -= 1;
+                    match __assert_res {
+                        Failed => Matched(__pos, TypeQualifier::Borrowed),
+                        Matched(..) => Failed,
+                    }
+                },
+                Failed => Failed
+            }
+        };
+        __state.suppress_fail -= 1;
+    }
+
+    if let Failed = res {
+        __state.suppress_fail += 1;
+        res = {
+            let __choice_res = slice_eq(__input, __state, __pos, "borrowed_mut");
+            match __choice_res {
+                Matched(__pos, _) => {
+                    __state.suppress_fail += 1;
+                    let __assert_res = if __input.len() > __pos {
+                        let (__ch, __next) = char_range_at(__input, __pos);
+                        match __ch {
+                            '_' | 'a'...'z' | 'A'...'Z' | '0'...'9' => Matched(__next, ()),
+                            _ => __state.mark_failure(__pos, "[_a-zA-Z0-9]"),
+                        }
+                    } else {
+                        __state.mark_failure(__pos, "[_a-zA-Z0-9]")
+                    };
+                    __state.suppress_fail -= 1;
+                    match __assert_res {
+                        Failed => Matched(__pos, TypeQualifier::BorrowedMut),
+                        Matched(..) => Failed,
+                    }
+                },
+                Failed => Failed
+            }
+        };
+        __state.suppress_fail -= 1;
+
+    }
+
+    res    
 }
 
 fn __parse_function_specifier<'input>(__input: &'input str, __state: &mut ParseState<'input>, __pos: usize, env: &mut Env) -> RuleResult<Node<FunctionSpecifier>> {
